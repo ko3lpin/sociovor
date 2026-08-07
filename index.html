@@ -6,7 +6,6 @@
     <title>Sociovor | Проект приостановлен</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
-    
     <style>
         :root {
             --primary-purple: #7c3aed;
@@ -25,7 +24,6 @@
             margin: 0;
         }
 
-        /* Анимированный фоновый градиент */
         .orb-container {
             position: fixed;
             top: 0;
@@ -75,7 +73,27 @@
             animation: orbit 32s infinite ease-in-out reverse, pulseOrb 11s infinite ease-in-out;
         }
 
-        /* Текст с неоновым приглушенным эффектом */
+        .orb-3 {
+            width: 35vw;
+            height: 35vw;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, transparent 70%);
+            top: 40%;
+            left: 50%;
+            animation: orbit 24s infinite ease-in-out, pulseOrb 7s infinite ease-in-out reverse;
+        }
+
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.025;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
         .neon-text-dormant {
             color: #f3f4f6;
             text-shadow:
@@ -84,17 +102,15 @@
                 0 0 60px rgba(76, 29, 149, 0.2);
         }
 
-        /* Анимация пульсации статуса */
         @keyframes statusPulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.85); }
+            0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.5); }
+            50% { opacity: 0.5; transform: scale(0.85); box-shadow: 0 0 0 6px rgba(168, 85, 247, 0); }
         }
 
         .status-dot {
-            animation: statusPulse 2s infinite ease-in-out;
+            animation: statusPulse 2.5s infinite ease-in-out;
         }
 
-        /* Слоган */
         .tagline {
             background: linear-gradient(to right, #9ca3af, #f3f4f6, #9ca3af);
             -webkit-background-clip: text;
@@ -124,141 +140,220 @@
 
         @keyframes glow-pulse {
             0%, 100% { text-shadow: 0 0 0px transparent; opacity: 0.8; }
-            50% { text-shadow: 0 0 15px var(--neon-purple); opacity: 1; }
+            50% { text-shadow: 0 0 20px var(--neon-purple), 0 0 40px rgba(168, 85, 247, 0.5); opacity: 1; }
         }
 
-        /* Появление блоков */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(25px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(30px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .animate-fade-in {
             opacity: 0;
-            animation: fadeInUp 0.8s ease-out forwards;
+            animation: fadeInUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .animate-scale-in {
+            opacity: 0;
+            animation: fadeInScale 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
         .delay-1 { animation-delay: 0.15s; }
-        .delay-2 { animation-delay: 0.3s; }
-        .delay-3 { animation-delay: 0.45s; }
-        .delay-4 { animation-delay: 0.6s; }
+        .delay-2 { animation-delay: 0.35s; }
+        .delay-3 { animation-delay: 0.55s; }
+        .delay-4 { animation-delay: 0.75s; }
+        .delay-5 { animation-delay: 0.95s; }
 
-        /* Эффект карточек */
         .glass-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px) saturate(1.2);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 24px;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(255, 255, 255, 0.03), rgba(124, 58, 237, 0.1));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.45s ease;
+        }
+
+        .glass-card:hover::before {
+            opacity: 1;
         }
 
         .glass-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(124, 58, 237, 0.15);
-            border-color: rgba(168, 85, 247, 0.35);
-            background: rgba(25, 25, 34, 0.85);
+            transform: translateY(-6px) scale(1.005);
+            box-shadow: 0 20px 50px rgba(124, 58, 237, 0.18), 0 0 0 1px rgba(168, 85, 247, 0.15);
+            border-color: rgba(168, 85, 247, 0.25);
+            background: rgba(25, 25, 36, 0.85);
         }
 
         .social-icon {
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        .social-icon:hover { transform: translateY(-4px) scale(1.08); }
-        .tg-icon:hover { filter: drop-shadow(0 0 14px #24A1DE); }
-        .tw-icon:hover { filter: drop-shadow(0 0 14px #9146FF); }
-        .ds-icon:hover { filter: drop-shadow(0 0 14px #5865F2); }
+        .social-icon:hover { transform: translateY(-5px) scale(1.1); }
+        .tg-icon:hover { filter: drop-shadow(0 0 20px #24A1DE); }
+        .tw-icon:hover { filter: drop-shadow(0 0 20px #9146FF); }
+        .ds-icon:hover { filter: drop-shadow(0 0 20px #5865F2); }
 
         .copy-toast {
             position: fixed;
             bottom: 2rem;
             left: 50%;
-            transform: translateX(-50%) translateY(100px);
+            transform: translateX(-50%) translateY(120px);
             background: linear-gradient(135deg, #a855f7, #7c3aed);
             color: #fff;
-            padding: 0.85rem 1.75rem;
+            padding: 0.9rem 2rem;
             border-radius: 50px;
             font-weight: 700;
-            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
-            transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            box-shadow: 0 12px 30px rgba(124, 58, 237, 0.45);
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
             z-index: 100;
         }
 
         .copy-toast.show { transform: translateX(-50%) translateY(0); }
 
         .icon-container {
-            width: 48px;
-            height: 48px;
-            background: rgba(124, 58, 237, 0.12);
-            border-radius: 14px;
+            width: 52px;
+            height: 52px;
+            background: rgba(124, 58, 237, 0.1);
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 1.25rem;
             color: var(--neon-purple);
-            border: 1px solid rgba(168, 85, 247, 0.25);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .glass-card:hover .icon-container {
+            background: rgba(124, 58, 237, 0.18);
+            border-color: rgba(168, 85, 247, 0.4);
+            transform: scale(1.05);
+        }
+
+        .shimmer {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+            animation: shimmer 6s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            20% { left: 200%; }
+            100% { left: 200%; }
+        }
+
+        .divider-glow {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.4), rgba(124, 58, 237, 0.6), rgba(168, 85, 247, 0.4), transparent);
+            width: 100%;
+            max-width: 200px;
+            margin: 0 auto;
+        }
+
+        .status-badge {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-badge::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 9999px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.5), rgba(124, 58, 237, 0.2));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
         }
     </style>
 </head>
-<body class="opacity-0 transition-opacity duration-700">
+<body class="opacity-0 transition-opacity duration-1000">
     <div class="orb-container">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
     </div>
+    <div class="noise-overlay"></div>
 
-    <div class="min-h-screen flex flex-col items-center justify-between py-10 px-4 md:px-8">
+    <div class="min-h-screen flex flex-col items-center justify-between py-12 px-4 md:px-8">
         <main class="max-w-4xl w-full text-center my-auto">
-            
-            <!-- Бейдж Статуса -->
-            <div class="mb-6 animate-fade-in delay-1 flex justify-center">
-                <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs md:text-sm font-semibold tracking-wide uppercase">
+
+            <div class="mb-8 animate-fade-in delay-1 flex justify-center">
+                <div class="status-badge inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-purple-500/8 border border-purple-500/20 text-purple-300 text-xs md:text-sm font-semibold tracking-wide uppercase backdrop-blur-sm">
                     <span class="w-2.5 h-2.5 rounded-full bg-purple-400 status-dot"></span>
                     Проект приостановлен
                 </div>
             </div>
-            
-            <!-- Название Проекта -->
-            <div class="mb-4 animate-fade-in delay-1">
+
+            <div class="mb-5 animate-fade-in delay-1">
                 <h1 class="text-6xl sm:text-7xl md:text-9xl font-black neon-text-dormant tracking-widest leading-none" style="font-family: 'Montserrat', sans-serif;">
                     SOCIOVOR
                 </h1>
             </div>
-            
-            <!-- Слоган -->
-            <div class="mb-12 animate-fade-in delay-2">
+
+            <div class="mb-14 animate-fade-in delay-2">
                 <span class="tagline text-xs sm:text-sm">
                     Сервер временно оффлайн &bull; Спасибо за историю &bull; Оставайтесь на связи
                 </span>
             </div>
 
-            <!-- Главная карточка-объявление -->
-            <div class="glass-card p-8 md:p-10 mb-10 text-left animate-fade-in delay-3 relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-bl-full pointer-events-none"></div>
-                
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="p-2 bg-purple-500/10 rounded-lg text-purple-400 border border-purple-500/20">
+            <div class="glass-card p-8 md:p-10 mb-10 text-left animate-fade-in delay-3 relative">
+                <div class="shimmer"></div>
+                <div class="absolute top-0 right-0 w-40 h-40 bg-purple-500/5 rounded-bl-full pointer-events-none"></div>
+                <div class="absolute bottom-0 left-0 w-24 h-24 bg-purple-500/3 rounded-tr-full pointer-events-none"></div>
+
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="p-2.5 bg-purple-500/10 rounded-xl text-purple-400 border border-purple-500/20">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                     </div>
-                    <h2 class="text-2xl font-bold text-white">Работа сервера приостановлена</h2>
+                    <h2 class="text-2xl md:text-3xl font-bold text-white">Работа сервера приостановлена</h2>
                 </div>
 
-                <p class="text-gray-300 leading-relaxed text-base md:text-lg mb-6">
+                <p class="text-gray-300 leading-relaxed text-base md:text-lg mb-7">
                     Дорогие игроки! На данный момент игровой сервер <span class="text-purple-300 font-semibold">Sociovor</span> заморожен. Мы безмерно благодарны каждому, кто строил, исследовал мир и создавал атмосферу нашего сообщества.
                 </p>
 
-                <div class="p-4 rounded-xl bg-black/40 border border-white/5 text-sm text-gray-400 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div class="flex items-center gap-2">
+                <div class="p-5 rounded-2xl bg-black/30 border border-white/5 text-sm text-gray-400 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
                         <svg class="w-5 h-5 text-purple-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         <span>Мир и прогресс игроков находится в полной сохранности.</span>
                     </div>
-                    <button onclick="copyToClipboard('https://t.me/sociovor')" class="px-3 py-1.5 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 text-xs font-semibold transition-colors shrink-0">
+                    <button onclick="copyToClipboard('https://t.me/sociovor')" class="px-4 py-2 rounded-xl bg-purple-500/15 hover:bg-purple-500/30 text-purple-300 text-xs font-semibold transition-all duration-300 shrink-0 border border-purple-500/20 hover:border-purple-500/40">
                         Следить за новостями
                     </button>
                 </div>
             </div>
 
-            <!-- Карточки деталей статуса -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-fade-in delay-4">
-                <div class="glass-card p-6 text-left flex flex-col">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14 animate-fade-in delay-4">
+                <div class="glass-card p-7 text-left flex flex-col">
                     <div class="icon-container">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     </div>
@@ -268,7 +363,7 @@
                     </p>
                 </div>
 
-                <div class="glass-card p-6 text-left flex flex-col">
+                <div class="glass-card p-7 text-left flex flex-col">
                     <div class="icon-container">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                     </div>
@@ -278,7 +373,7 @@
                     </p>
                 </div>
 
-                <div class="glass-card p-6 text-left flex flex-col">
+                <div class="glass-card p-7 text-left flex flex-col">
                     <div class="icon-container">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     </div>
@@ -289,9 +384,9 @@
                 </div>
             </div>
 
-            <!-- Текст про Sociovor -->
-            <div class="mb-12 animate-fade-in delay-4">
-                <h2 class="text-2xl md:text-3xl font-bold mb-4 text-white tracking-tight">Больше, чем просто стрим</h2>
+            <div class="mb-14 animate-fade-in delay-5">
+                <div class="divider-glow mb-8"></div>
+                <h2 class="text-2xl md:text-3xl font-bold mb-5 text-white tracking-tight">Больше, чем просто стрим</h2>
                 <div class="max-w-2xl mx-auto">
                     <p class="text-gray-300 text-base md:text-lg leading-relaxed">
                         <span class="glow-word">Sociovor</span> — это не только никнейм на экране. Это проект, рожденный из любви к игре и общения со зрителями. Мы перенесли атмосферу уютных стримов в полноценный игровой мир, где каждый игрок становится частью большой истории нашего сообщества.
@@ -299,32 +394,28 @@
                 </div>
             </div>
 
-            <!-- Социальные сети -->
-            <div class="mb-8 animate-fade-in delay-4">
-                <p class="text-sm uppercase tracking-widest text-purple-400/90 mb-6 font-bold">Оставайтесь на связи с нами</p>
-                <div class="flex flex-wrap items-center justify-center gap-6">
-                    <!-- Telegram -->
+            <div class="mb-8 animate-fade-in delay-5">
+                <p class="text-sm uppercase tracking-widest text-purple-400/90 mb-7 font-bold">Оставайтесь на связи с нами</p>
+                <div class="flex flex-wrap items-center justify-center gap-7">
                     <a href="https://t.me/sociovor" target="_blank" class="social-icon tg-icon group">
-                        <div class="bg-[#24A1DE]/15 hover:bg-[#24A1DE] border border-[#24A1DE]/40 p-4 rounded-2xl transition-all duration-300">
-                            <svg class="w-7 h-7 text-[#24A1DE] group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                        <div class="bg-[#24A1DE]/10 hover:bg-[#24A1DE] border border-[#24A1DE]/30 p-5 rounded-2xl transition-all duration-400">
+                            <svg class="w-8 h-8 text-[#24A1DE] group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.69-.52.35-.97.53-1.38.52-.44-.01-1.28-.26-1.91-.46-.77-.25-1.38-.39-1.33-.82.03-.22.33-.45.91-.68 3.55-1.55 5.92-2.57 7.12-3.07 3.39-1.42 4.09-1.66 4.55-1.67.1 0 .33.02.48.15.12.1.16.23.18.33.02.08.03.24.02.4z"/>
                             </svg>
                         </div>
                     </a>
 
-                    <!-- Discord -->
                     <a href="https://discord.gg/dDB4NgmEEk" target="_blank" class="social-icon ds-icon group">
-                        <div class="bg-[#5865F2]/15 hover:bg-[#5865F2] border border-[#5865F2]/40 p-4 rounded-2xl transition-all duration-300">
-                            <svg class="w-7 h-7 text-[#5865F2] group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                        <div class="bg-[#5865F2]/10 hover:bg-[#5865F2] border border-[#5865F2]/30 p-5 rounded-2xl transition-all duration-400">
+                            <svg class="w-8 h-8 text-[#5865F2] group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
                             </svg>
                         </div>
                     </a>
 
-                    <!-- Twitch -->
                     <a href="https://twitch.tv/emy_erispain" target="_blank" class="social-icon tw-icon group">
-                        <div class="bg-[#9146FF]/15 hover:bg-[#9146FF] border border-[#9146FF]/40 p-4 rounded-2xl transition-all duration-300">
-                            <svg class="w-7 h-7 text-[#9146FF] group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                        <div class="bg-[#9146FF]/10 hover:bg-[#9146FF] border border-[#9146FF]/30 p-5 rounded-2xl transition-all duration-400">
+                            <svg class="w-8 h-8 text-[#9146FF] group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/>
                             </svg>
                         </div>
@@ -334,7 +425,6 @@
         </main>
     </div>
 
-    <!-- Всплывающее уведомление -->
     <div id="copyToast" class="copy-toast">Ссылка скопирована!</div>
 
     <script>
